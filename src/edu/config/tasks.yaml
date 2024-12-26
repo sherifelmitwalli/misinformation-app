@@ -1,0 +1,48 @@
+claim_extraction_task:
+  description: >
+    Analyze the provided content and extract key claims related to {topic}.
+    Focus on:
+    1. Health impact claims (if applicable).
+    2. Scientific assertions.
+    3. Policy-related statements.
+    4. Statistical claims.
+    Categorize claims and provide relevant metadata such as source type and credibility indicators.
+  expected_output: >
+    A structured list of extracted claims with:
+    - Claim category (health/scientific/policy/statistical)
+    - Source type and credibility indicators
+    - Priority level for verification
+  agent: content_analyzer
+
+claim_verification_task:
+  description: >
+    Verify the extracted claims against authoritative and independent sources.
+    Use:
+    1. WHO guidelines (if applicable).
+    2. Peer-reviewed research and academic publications.
+    3. Public health agency data or relevant industry standards.
+    Document the evidence used and assess the validity of each claim.
+  expected_output: >
+    A detailed verification report with:
+    - Evidence for or against each claim.
+    - Verification confidence level (low, medium, high).
+    - Any discrepancies or contradictions found.
+  agent: fact_verifier
+  context: [claim_extraction_task]
+
+credibility_assessment_task:
+  description: >
+    Assess the credibility of the verified claims based on the provided evidence.
+    Consider:
+    1. Alignment with scientific consensus.
+    2. Quality and independence of supporting evidence.
+    3. Public impact and relevance of claims.
+    Provide a credibility score and justification for each claim.
+  expected_output: >
+    A comprehensive credibility assessment including:
+    - Evidence-based credibility score (0-100).
+    - Alignment with scientific consensus.
+    - Justification for credibility assessment.
+  agent: credibility_assessor
+  context: [claim_verification_task]
+
