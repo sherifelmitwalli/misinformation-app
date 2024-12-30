@@ -25,12 +25,25 @@ warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 # interpolate any tasks and agents information
 
 
+def validate_inputs(inputs: dict) -> bool:
+    required_fields = ['topic', 'source_type', 'url', 'timestamp']
+    if not all(field in inputs for field in required_fields):
+        raise ValueError(f"Missing required fields. Required: {required_fields}")
+    
+    if not isinstance(inputs['topic'], str) or len(inputs['topic'].strip()) == 0:
+        raise ValueError("Topic must be a non-empty string")
+    
+    valid_source_types = ['news_article', 'scientific_paper', 'social_media', 'website']
+    if inputs['source_type'] not in valid_source_types:
+        raise ValueError(f"Invalid source_type. Must be one of: {valid_source_types}")
+    
+    return True
+
 def run():
     """
     Run the misinformation detection crew.
     """
     inputs = {
-       # 'topic': "Smoking reduces life expectancy by 10 years.",
         'topic': "Smoking reduces life expectancy by 10 years. E-cigarettes are safer than traditional cigarettes. Tobacco companies are not responsible for lung cancer.",
         'source_type': 'news_article',  # Specify the type of source (e.g., news_article, social_media)
         'url': "https://example.com",
