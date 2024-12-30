@@ -18,9 +18,14 @@ claim_verification_task:
   description: >
     Verify the extracted claims against authoritative and independent sources.
     Use:
-    1. WHO guidelines (if applicable).
-    2. Peer-reviewed research and academic publications.
-    3. Public health agency data or relevant industry standards.
+    1. WHO tobacco control guidelines
+    2. CDC tobacco research database
+    3. National Cancer Institute tobacco facts
+    4. Peer-reviewed tobacco research journals
+    5. Public health agency tobacco statistics
+    6. WHO guidelines (if applicable).
+    7. Peer-reviewed research and academic publications.
+    8. Public health agency data or relevant industry standards.
     Document the evidence used and assess the validity of each claim.
   expected_output: >
     A detailed verification report with:
@@ -32,11 +37,12 @@ claim_verification_task:
 
 credibility_assessment_task:
   description: >
-    Assess the credibility of the verified claims based on the provided evidence.
-    Consider:
-    1. Alignment with scientific consensus.
-    2. Quality and independence of supporting evidence.
-    3. Public impact and relevance of claims.
+    Assess the credibility of the verified claims based on:
+    1. Alignment with established tobacco research
+    2. Industry funding disclosure and conflicts of interest
+    3. Methodology quality for tobacco-specific studies
+    4. Historical accuracy of the source on tobacco issues
+    5. Temporal relevance of the research
     Provide a credibility score and justification for each claim.
   expected_output: >
     A comprehensive credibility assessment including:
