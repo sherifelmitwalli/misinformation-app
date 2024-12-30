@@ -2,7 +2,6 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 import os
 from dotenv import load_dotenv
-
 from crewai_tools import SerperDevTool
 
 # Load environment variables
@@ -64,8 +63,8 @@ class Edu():
     def crew(self) -> Crew:
         """Creates the Misinformation Detection Crew"""
         return Crew(
-            agents=self.agents,  # Automatically created by the @agent decorator
-            tasks=self.tasks,  # Automatically created by the @task decorator
+            agents=self.agents,
+            tasks=self.tasks,
             process=Process.sequential,
             verbose=True
         )
