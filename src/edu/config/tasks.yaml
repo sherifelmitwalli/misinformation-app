@@ -23,15 +23,12 @@ claim_verification_task:
     3. National Cancer Institute tobacco facts
     4. Peer-reviewed tobacco research journals
     5. Public health agency tobacco statistics
-    6. WHO guidelines (if applicable).
-    7. Peer-reviewed research and academic publications.
-    8. Public health agency data or relevant industry standards.
     Document the evidence used and assess the validity of each claim.
   expected_output: >
     A detailed verification report with:
-    - Evidence for or against each claim.
-    - Verification confidence level (low, medium, high).
-    - Any discrepancies or contradictions found.
+    - Evidence for or against each claim
+    - Verification confidence level (low, medium, high)
+    - Any discrepancies or contradictions found
   agent: fact_verifier
   context: [claim_extraction_task]
 
@@ -43,12 +40,12 @@ credibility_assessment_task:
     3. Methodology quality for tobacco-specific studies
     4. Historical accuracy of the source on tobacco issues
     5. Temporal relevance of the research
-    Provide a credibility score and justification for each claim.
   expected_output: >
     A comprehensive credibility assessment including:
-    - Evidence-based credibility score (0-100).
-    - Alignment with scientific consensus.
-    - Justification for credibility assessment.
+    - Evidence-based credibility score (0-100)
+    - Alignment with scientific consensus
+    - Justification for credibility assessment
   agent: credibility_assessor
   context: [claim_verification_task]
+
 
