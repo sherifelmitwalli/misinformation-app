@@ -1,89 +1,96 @@
 #!/usr/bin/env python
+"""
+Main Entry Point for Tobacco Misinformation Credibility Assessment Pipeline
+Implementation corresponding to:
+Elmitwalli et al., Frontiers in Artificial Intelligence, 2025.
+doi: 10.3389/frai.2025.1659861
+"""
+
+import os
 import sys
 import warnings
-from edu.crew import Edu
-import os
 from dotenv import load_dotenv
+
+# Load environment variables
 load_dotenv()
 
-
-# Make sure to install langtrace-python-sdk before running this script
-# Run the following command in your terminal:
-
-# Must precede any llm module imports
-
-from langtrace_python_sdk import langtrace
-LANGTRACE_API_KEY= os.getenv("LANGTRACE_API_KEY")
-
-
-langtrace.init(api_key = LANGTRACE_API_KEY)
+# Filter warnings
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
-# This main file is intended to be a way for you to run your
-# crew locally, so refrain from adding unnecessary logic into this file.
-# Replace with inputs you want to test with, it will automatically
-# interpolate any tasks and agents information
+# Optional Langtrace observability initialization
+LANGTRACE_API_KEY = os.getenv("LANGTRACE_API_KEY")
+if LANGTRACE_API_KEY:
+    try:
+        from langtrace_python_sdk import langtrace
+        langtrace.init(api_key=LANGTRACE_API_KEY)
+    except Exception as e:
+        pass
 
+from edu.crew import Edu
 
 def validate_inputs(inputs: dict) -> bool:
+    """Validate required input structure."""
     required_fields = ['topic', 'source_type', 'url', 'timestamp']
     if not all(field in inputs for field in required_fields):
         raise ValueError(f"Missing required fields. Required: {required_fields}")
     
     if not isinstance(inputs['topic'], str) or len(inputs['topic'].strip()) == 0:
-        raise ValueError("Topic must be a non-empty string")
-    
-    valid_source_types = ['news_article', 'scientific_paper', 'social_media', 'website']
-    if inputs['source_type'] not in valid_source_types:
-        raise ValueError(f"Invalid source_type. Must be one of: {valid_source_types}")
+        raise ValueError("Topic must be a non-empty string containing the claim(s) to evaluate.")
     
     return True
 
 def run():
     """
-    Run the misinformation detection crew.
+    Run the multi-agent misinformation detection crew on sample claims.
     """
-    inputs = {
-        'topic': "Smoking reduces life expectancy by 10 years. E-cigarettes are safer than traditional cigarettes. Tobacco companies are not responsible for lung cancer.",
-        'source_type': 'news_article',  # Specify the type of source (e.g., news_article, social_media)
-        'url': "https://example.com",
-        'timestamp': "2024-12-20T12:00:00Z"
-    }
-    Edu().crew().kickoff(inputs=inputs)
+    # Default sample claims illustrating diverse categories from the published study
+    sample_claims = (
+        "1. Smoking reduces life expectancy by 10 years. "
+        "2. Plain packaging has no impact on smoking initiation rates. "
+        "3. E-cigarettes are completely safe for long-term use."
+    )
 
+    inputs = {
+        'topic': sample_claims,
+        'source_type': 'tobacco_health_claims',
+        'url': 'https://www.who.int/health-topics/tobacco',
+        'timestamp': '2025-10-01T12:00:00Z'
+    }
+
+    validate_inputs(inputs)
+    print("=" * 80)
+    print("Launching Multi-Agent Credibility Assessment Pipeline (Frontiers in AI, 2025)...")
+    print("=" * 80)
+    print(f"Input Topic: {inputs['topic']}\n")
+
+    result = Edu().crew().kickoff(inputs=inputs)
+    print("\n" + "=" * 80)
+    print("PIPELINE ASSESSMENT RESULTS:")
+    print("=" * 80)
+    print(result)
 
 def train():
-    """
-    Train the crew for a given number of iterations.
-    """
-    inputs = {
-        "topic": "AI LLMs"
-    }
+    """Train the crew for a given number of iterations."""
+    inputs = {"topic": "Tobacco misinformation claims"}
     try:
         Edu().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
-
     except Exception as e:
         raise Exception(f"An error occurred while training the crew: {e}")
 
 def replay():
-    """
-    Replay the crew execution from a specific task.
-    """
+    """Replay the crew execution from a specific task."""
     try:
         Edu().crew().replay(task_id=sys.argv[1])
-
     except Exception as e:
         raise Exception(f"An error occurred while replaying the crew: {e}")
 
 def test():
-    """
-    Test the crew execution and returns the results.
-    """
-    inputs = {
-        "topic": "AI LLMs"
-    }
+    """Test the crew execution and return results."""
+    inputs = {"topic": "Tobacco misinformation claims"}
     try:
         Edu().crew().test(n_iterations=int(sys.argv[1]), openai_model_name=sys.argv[2], inputs=inputs)
-
     except Exception as e:
-        raise Exception(f"An error occurred while replaying the crew: {e}")
+        raise Exception(f"An error occurred while testing the crew: {e}")
+
+if __name__ == "__main__":
+    run()

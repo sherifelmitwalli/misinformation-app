@@ -1,51 +1,88 @@
 claim_extraction_task:
   description: >
-    Analyze the provided content and extract key claims related to {topic}.
-    Focus on:
-    1. Health impact claims (if applicable).
-    2. Scientific assertions.
-    3. Policy-related statements.
-    4. Statistical claims.
-    Categorize claims and provide relevant metadata such as source type and credibility indicators.
+    Analyze the provided content and extract all key claims related to {topic}.
+    For each extracted claim:
+    1. Restate the exact claim clearly.
+    2. Classify into one of four categories:
+       - Health impact claim (physiological/psychological effects)
+       - Scientific assertion (chemical properties, biological mechanisms, research findings)
+       - Policy-related statement (regulatory effectiveness, governance, treaty rules, industry practices)
+       - Statistical claim (numeric assertions about prevalence, economic impacts, illicit trade, mortality)
+    3. Note the core underlying assertion and any evident rhetoric/framing.
   expected_output: >
-    A structured list of extracted claims with:
-    - Claim category (health/scientific/policy/statistical)
-    - Source type and credibility indicators
-    - Priority level for verification
+    A structured list of extracted claims, each with:
+    - Claim Number and Exact Statement
+    - Category (Health impact / Scientific assertion / Policy-related / Statistical)
+    - Key assertion and focus
   agent: content_analyzer
 
 claim_verification_task:
   description: >
-    Verify the extracted claims against authoritative and independent sources.
-    Use:
-    1. WHO tobacco control guidelines
-    2. CDC tobacco research database
-    3. National Cancer Institute tobacco facts
-    4. Peer-reviewed tobacco research journals
-    5. Public health agency tobacco statistics
-    Document the evidence used and assess the validity of each claim.
+    Systematically verify each extracted claim against authoritative scientific and international public health sources.
+    Consult authoritative repositories and databases including:
+    - WHO Framework Convention on Tobacco Control (WHO FCTC) official documentation, treaty text, and COP Rules of Procedure / Decisions
+    - World Health Organization (WHO) and Centers for Disease Control and Prevention (CDC) reports and factsheets
+    - World Trade Organization (WTO) dispute settlement rulings (e.g., on plain packaging)
+    - Peer-reviewed research, systematic reviews, and Cochrane reviews
+    - International economic data (World Bank, FAO, national customs / tax data)
+    
+    For each claim, identify:
+    1. What the authoritative evidence and treaty records actually establish.
+    2. Specific supporting evidence (if any exists).
+    3. Specific contradicting evidence, facts, and institutional consensus.
+    4. Verification confidence level (High / Medium / Low).
+    5. Specific citations and source URLs.
   expected_output: >
-    A detailed verification report with:
-    - Evidence for or against each claim
-    - Verification confidence level (low, medium, high)
-    - Any discrepancies or contradictions found
+    A detailed verification report for each individual claim containing:
+    - Restated claim
+    - Authoritative factual findings from WHO, FCTC, WTO, and peer-reviewed sources
+    - Supporting vs contradicting evidence breakdown
+    - Verification confidence level
+    - Key sources and citations consulted
   agent: fact_verifier
   context: [claim_extraction_task]
 
 credibility_assessment_task:
   description: >
-    Assess the credibility of the verified claims based on:
-    1. Alignment with established tobacco research
-    2. Industry funding disclosure and conflicts of interest
-    3. Methodology quality for tobacco-specific studies
-    4. Historical accuracy of the source on tobacco issues
-    5. Temporal relevance of the research
+    Conduct a rigorous, quantitative credibility assessment of EACH verified claim individually using the 
+    published five-dimensional scoring framework from Elmitwalli et al. (Frontiers in Artificial Intelligence, 2025):
+    
+    1. Evidence Quality (Eq, 40% weight): Methodological rigor, authority, and independence of available evidence (0-100).
+    2. Scientific & Institutional Consensus (Sc, 25% weight): Degree of agreement across authoritative international bodies (WHO, FCTC Secretariat, WTO, peer-reviewed consensus) (0-100).
+    3. Evidence Consistency (Ec, 15% weight): Consistency of findings across multiple studies, reviews, and jurisdictions (0-100).
+    4. Evidence Recency (Er, 10% weight): Currency and validity reflecting recent COP decisions and updated scientific evidence (0-100).
+    5. Scientific & Governance Plausibility (Sp, 10% weight): Alignment with established public health principles, treaty governance mechanisms, and legal realities (0-100).
+    
+    Calculate the composite score using the exact formula:
+    Score = (Eq * 0.40) + (Sc * 0.25) + (Ec * 0.15) + (Er * 0.10) + (Sp * 0.10)
+    
+    Map the score to the Five-Level Credibility Classification:
+    - Highly likely to be credible (81–100)
+    - Likely to be credible (61–80)
+    - Moderate credibility (41–60)
+    - Unlikely to be credible (21–40)
+    - Highly unlikely to be credible (0–20)
+    
+    Provide detailed narrative justification, component scoring breakdown, and key authoritative references for each claim.
   expected_output: >
-    A comprehensive credibility assessment including:
-    - Evidence-based credibility score (0-100)
-    - Alignment with scientific consensus
-    - Justification for credibility assessment
+    A comprehensive credibility assessment report:
+    
+    For each claim:
+    ### CLAIM [N]: "[Exact Claim]"
+    - **Category:** [Health impact / Scientific assertion / Policy-related / Statistical]
+    - **Final Credibility Score:** [0-100]/100
+    - **Credibility Level:** [Highly Unlikely / Unlikely / Moderate / Likely / Highly Likely]
+    - **Component Scores Breakdown:**
+      * Evidence Quality (Eq, 40%): [score]/100 - [brief justification]
+      * Scientific / Institutional Consensus (Sc, 25%): [score]/100 - [brief justification]
+      * Evidence Consistency (Ec, 15%): [score]/100 - [brief justification]
+      * Evidence Recency (Er, 10%): [score]/100 - [brief justification]
+      * Scientific / Governance Plausibility (Sp, 10%): [score]/100 - [brief justification]
+      * Calculation: ([Eq]*0.40) + ([Sc]*0.25) + ([Ec]*0.15) + ([Er]*0.10) + ([Sp]*0.10) = [Total]
+    - **Factual Reality vs Claim:** [Clear, bulleted explanation of what the evidence shows vs why the claim is misleading]
+    - **Authoritative Sources:** [Specific citations from WHO, FCTC, Cochrane, WTO, peer-reviewed literature]
+    
+    **SUMMARY TABLE FOR PRESENTATION:**
+    A markdown summary table listing Claim, Category, Automated Score, Credibility Level, and Core Verdict for quick presentation slides.
   agent: credibility_assessor
   context: [claim_verification_task]
-
-

@@ -13,7 +13,6 @@ search_tool = SerperDevTool()
 class Edu():
     """Crew for detecting misinformation in {topic} content"""
 
-    # Updated configuration file paths
     agents_config = 'config/agents.yaml'
     tasks_config = 'config/tasks.yaml'
 
@@ -61,10 +60,11 @@ class Edu():
 
     @crew
     def crew(self) -> Crew:
-        """Creates the Misinformation Detection Crew"""
+        """Creates the Misinformation Credibility Assessment Crew"""
         return Crew(
             agents=self.agents,
             tasks=self.tasks,
             process=Process.sequential,
-            verbose=True
+            verbose=True,
+            max_retry_limit=2,
         )

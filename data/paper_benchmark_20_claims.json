@@ -1,0 +1,202 @@
+[
+  {
+    "id": 1,
+    "claim": "Smoking reduces life expectancy by 10 years",
+    "category": "Health impact",
+    "manual_score": 95,
+    "manual_category": "Highly Likely",
+    "paper_automated_score": 95,
+    "paper_automated_category": "Highly Likely",
+    "reviewer_comments": "Robust, consistent epidemiological evidence (WHO, CDC, meta-analyses)."
+  },
+  {
+    "id": 2,
+    "claim": "Second-hand smoke exposure increases lung cancer risk by 25%",
+    "category": "Health impact",
+    "manual_score": 90,
+    "manual_category": "Highly Likely",
+    "paper_automated_score": 90,
+    "paper_automated_category": "Highly Likely",
+    "reviewer_comments": "Well-documented 20–30% increased risk in cohort and case–control studies."
+  },
+  {
+    "id": 3,
+    "claim": "E-cigarettes are completely safe for long-term use",
+    "category": "Scientific assertion",
+    "manual_score": 10,
+    "manual_category": "Highly Unlikely",
+    "paper_automated_score": 25,
+    "paper_automated_category": "Unlikely",
+    "reviewer_comments": "'Completely safe' is misleading; long-term safety unproven and emerging data show harms."
+  },
+  {
+    "id": 4,
+    "claim": "Smokeless tobacco products like snus significantly reduce oral cancer risk relative to smoking",
+    "category": "Scientific assertion",
+    "manual_score": 60,
+    "manual_category": "Moderate",
+    "paper_automated_score": 65,
+    "paper_automated_category": "Likely",
+    "reviewer_comments": "Some studies show reduced risk, but evidence is mixed and dependent on use patterns."
+  },
+  {
+    "id": 5,
+    "claim": "Nicotine consumption leads to irreversible brain damage in adolescents",
+    "category": "Health impact",
+    "manual_score": 90,
+    "manual_category": "Highly Likely",
+    "paper_automated_score": 90,
+    "paper_automated_category": "Highly Likely",
+    "reviewer_comments": "Strong consensus on developmental neurotoxicity from animal and human studies."
+  },
+  {
+    "id": 6,
+    "claim": "Tobacco taxation is the most effective method to reduce smoking rates",
+    "category": "Policy",
+    "manual_score": 85,
+    "manual_category": "Highly Likely",
+    "paper_automated_score": 85,
+    "paper_automated_category": "Highly Likely",
+    "reviewer_comments": "Tax increases consistently rank among top tobacco control measures in econometric and public-health reviews."
+  },
+  {
+    "id": 7,
+    "claim": "Plain packaging has no impact on smoking initiation rates",
+    "category": "Policy",
+    "manual_score": 30,
+    "manual_category": "Unlikely",
+    "paper_automated_score": 45,
+    "paper_automated_category": "Moderate",
+    "reviewer_comments": "Empirical studies demonstrate modest reductions in youth appeal and initiation; 'no impact' is unlikely."
+  },
+  {
+    "id": 8,
+    "claim": "E-cigarettes are banned in over 50 countries worldwide",
+    "category": "Statistical",
+    "manual_score": 30,
+    "manual_category": "Unlikely",
+    "paper_automated_score": 40,
+    "paper_automated_category": "Unlikely",
+    "reviewer_comments": "Fewer than 50 full bans (WHO reports ~35); claim overstates the global count."
+  },
+  {
+    "id": 9,
+    "claim": "Tobacco industry lobbying weakens public health policies globally",
+    "category": "Policy",
+    "manual_score": 85,
+    "manual_category": "Highly Likely",
+    "paper_automated_score": 85,
+    "paper_automated_category": "Highly Likely",
+    "reviewer_comments": "Extensive literature documents lobbying's negative influence on FCTC implementation."
+  },
+  {
+    "id": 10,
+    "claim": "Flavored tobacco products target youth users",
+    "category": "Policy",
+    "manual_score": 95,
+    "manual_category": "Highly Likely",
+    "paper_automated_score": 90,
+    "paper_automated_category": "Highly Likely",
+    "reviewer_comments": "Clear marketing strategies and youth-prevalence data confirm flavor targeting."
+  },
+  {
+    "id": 11,
+    "claim": "Nicotine replacement therapies (NRTs) double quitting success",
+    "category": "Scientific assertion",
+    "manual_score": 75,
+    "manual_category": "Likely",
+    "paper_automated_score": 75,
+    "paper_automated_category": "Likely",
+    "reviewer_comments": "Meta-analyses show ~1.5–2 × improvement in quit rates with NRT vs. placebo."
+  },
+  {
+    "id": 12,
+    "claim": "Tobacco companies have funded research denying the link between smoking and cancer",
+    "category": "Policy",
+    "manual_score": 95,
+    "manual_category": "Highly Likely",
+    "paper_automated_score": 95,
+    "paper_automated_category": "Highly Likely",
+    "reviewer_comments": "Historical internal documents confirm industry-sponsored denial campaigns."
+  },
+  {
+    "id": 13,
+    "claim": "The harmful effects of vaping exceed those of smoking",
+    "category": "Health impact",
+    "manual_score": 10,
+    "manual_category": "Highly Unlikely",
+    "paper_automated_score": 30,
+    "paper_automated_category": "Unlikely",
+    "reviewer_comments": "Increasing evidence vaping less harmful than smoking; claim contradicts major reviews; 'exceed' is highly unlikely."
+  },
+  {
+    "id": 14,
+    "claim": "Smoking cessation reduces heart disease risk within 5 years",
+    "category": "Health impact",
+    "manual_score": 70,
+    "manual_category": "Likely",
+    "paper_automated_score": 70,
+    "paper_automated_category": "Likely",
+    "reviewer_comments": "Risk declines by ~50% within 5 years of quitting; supported by cohort studies."
+  },
+  {
+    "id": 15,
+    "claim": "The tobacco industry's harm-reduction investment is predominantly profit-driven",
+    "category": "Policy",
+    "manual_score": 80,
+    "manual_category": "Likely",
+    "paper_automated_score": 80,
+    "paper_automated_category": "Likely",
+    "reviewer_comments": "Strong evidence from financial reports and industry documents shows profit-driven strategy, with limited secondary involvement in health initiatives."
+  },
+  {
+    "id": 16,
+    "claim": "Smoking rates have decreased by 20% globally over the past decade",
+    "category": "Statistical",
+    "manual_score": 40,
+    "manual_category": "Unlikely",
+    "paper_automated_score": 60,
+    "paper_automated_category": "Moderate",
+    "reviewer_comments": "Global adult prevalence fell ~10–15%; a 20% drop overstates the decline."
+  },
+  {
+    "id": 17,
+    "claim": "Over 8 million people die annually from tobacco-related illnesses",
+    "category": "Statistical",
+    "manual_score": 95,
+    "manual_category": "Highly Likely",
+    "paper_automated_score": 95,
+    "paper_automated_category": "Highly Likely",
+    "reviewer_comments": "WHO and GBD consistently report ~7–8 million annual deaths."
+  },
+  {
+    "id": 18,
+    "claim": "Youth smoking rates remain unchanged in strong-policy countries",
+    "category": "Statistical",
+    "manual_score": 30,
+    "manual_category": "Unlikely",
+    "paper_automated_score": 40,
+    "paper_automated_category": "Unlikely",
+    "reviewer_comments": "Most high-policy nations report declines; 'unchanged' is misleading."
+  },
+  {
+    "id": 19,
+    "claim": "Smokers are three times more likely to develop severe COVID-19 symptoms",
+    "category": "Scientific assertion",
+    "manual_score": 70,
+    "manual_category": "Likely",
+    "paper_automated_score": 70,
+    "paper_automated_category": "Likely",
+    "reviewer_comments": "Multiple meta-analyses find ~2–3 × increased risk of severe outcomes among smokers."
+  },
+  {
+    "id": 20,
+    "claim": "Tobacco farming employs over 1 million people worldwide",
+    "category": "Statistical",
+    "manual_score": 90,
+    "manual_category": "Highly Likely",
+    "paper_automated_score": 65,
+    "paper_automated_category": "Likely",
+    "reviewer_comments": "Accurate according to FAO/ILO global workforce data."
+  }
+]
