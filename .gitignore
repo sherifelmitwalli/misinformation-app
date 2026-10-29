@@ -43,6 +43,9 @@ env/
 *.log
 scratch/
 cop_credibility*
+cop_original_six*
+harm_reduction*
+revised_claims*
 audit_pipeline.py
 run_cop_claims.py
 knowledge/

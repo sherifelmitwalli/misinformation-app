@@ -1,4 +1,4 @@
-from crewai import Agent, Crew, Process, Task
+from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 import os
 from dotenv import load_dotenv
@@ -9,6 +9,14 @@ load_dotenv()
 SERPER_API_KEY = os.getenv("SERPER_API_KEY")
 search_tool = SerperDevTool()
 
+openrouter_key = os.getenv("OPENROUTER_API_KEY")
+openrouter_model = os.getenv("OPENROUTER_MODEL", "openai/gpt-6-luna")
+
+def get_pipeline_llm():
+    if openrouter_key:
+        return LLM(model=f"openrouter/{openrouter_model}", api_key=openrouter_key)
+    return None
+
 @CrewBase
 class Edu():
     """Crew for detecting misinformation in {topic} content"""
@@ -18,26 +26,27 @@ class Edu():
 
     @agent
     def content_analyzer(self) -> Agent:
-        return Agent(
-            config=self.agents_config['content_analyzer'],
-            verbose=True,
-            tools=[search_tool]
-        )
+        llm = get_pipeline_llm()
+        kwargs = {"config": self.agents_config['content_analyzer'], "verbose": True, "tools": [search_tool]}
+        if llm:
+            kwargs["llm"] = llm
+        return Agent(**kwargs)
 
     @agent
     def fact_verifier(self) -> Agent:
-        return Agent(
-            config=self.agents_config['fact_verifier'],
-            verbose=True,
-            tools=[search_tool]
-        )
+        llm = get_pipeline_llm()
+        kwargs = {"config": self.agents_config['fact_verifier'], "verbose": True, "tools": [search_tool]}
+        if llm:
+            kwargs["llm"] = llm
+        return Agent(**kwargs)
 
     @agent
     def credibility_assessor(self) -> Agent:
-        return Agent(
-            config=self.agents_config['credibility_assessor'],
-            verbose=True
-        )
+        llm = get_pipeline_llm()
+        kwargs = {"config": self.agents_config['credibility_assessor'], "verbose": True}
+        if llm:
+            kwargs["llm"] = llm
+        return Agent(**kwargs)
 
     @task
     def claim_extraction_task(self) -> Task:
