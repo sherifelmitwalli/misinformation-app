@@ -3,122 +3,139 @@
 [![Frontiers in Artificial Intelligence](https://img.shields.io/badge/Frontiers_in_AI-10.3389%2Ffrai.2025.1659861-blue.svg)](https://doi.org/10.3389/frai.2025.1659861)
 [![Harvard Dataverse](https://img.shields.io/badge/Dataverse-10.7910%2FDVN%2FODKMNH-orange.svg)](https://doi.org/10.7910/DVN/ODKMNH)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue)](https://www.python.org/)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Framework: CrewAI](https://img.shields.io/badge/Framework-CrewAI-red.svg)](https://crewai.com)
 
-Official open-source implementation and evaluation suite for the study:
+Official open-source repository and reproducibility suite for the study:
+
 > **"Development and validation of a multi-agent AI pipeline for automated credibility assessment of tobacco misinformation: a proof-of-concept study"**  
 > *Sherif Elmitwalli, John Mehegan, Sophie Braznell, Allen Gallagher*  
-> **Frontiers in Artificial Intelligence**, 8:1659861 (2025). [doi:10.3389/frai.2025.1659861](https://doi.org/10.3389/frai.2025.1659861)  
+> **Frontiers in Artificial Intelligence**, 8:1659861 (2025).  
+> **DOI:** [10.3389/frai.2025.1659861](https://doi.org/10.3389/frai.2025.1659861)  
 > *Tobacco Control Research Group (TCRG), Department for Health, University of Bath, United Kingdom.*
 
 ---
 
-## Overview
+## 📌 Executive Summary
 
-The proliferation of tobacco-related misinformation poses significant public health risks, requiring scalable solutions for credibility assessment. Traditional manual fact-checking requires 2–4 hours per claim and cannot match the velocity of digital misinformation.
+Tobacco misinformation spreads across digital platforms far faster than traditional manual fact-checking can counter, where expert review requires **2–4 hours per claim**. 
 
-This repository provides an automated, proof-of-concept **multi-agent AI pipeline** constructed using OpenAI LLMs (`GPT-4.1` / `GPT-4o`), the [CrewAI](https://crewai.com) framework, and the Serper API for real-time retrieval from authoritative health databases (WHO, CDC, PubMed Central, Cochrane). 
+This repository provides an automated, proof-of-concept **multi-agent AI pipeline** that evaluates the credibility of tobacco-related claims in **under 7 seconds per claim** (>1,000× speedup). The system integrates autonomous specialized LLM agents with real-time web retrieval against authoritative public health repositories (WHO, CDC, Cochrane, PubMed Central, WTO).
 
-In empirical validation across 20 tobacco claims against blinded human PhD experts, the pipeline achieved:
-* **Mean Absolute Error (MAE):** 6.25 points on a 0–100 scale
-* **Inter-Rater Agreement:** Weighted Cohen's $\kappa = 0.68$ (95% CI: 0.52–0.84, substantial agreement)
-* **Categorical Alignment:** 70% exact category agreement, 95% adjacent-level agreement
-* **Processing Speed:** Under 7 seconds per claim (>1,000× faster than manual review)
+### Validated Empirical Performance (Frontiers in AI, 2025)
+In a blinded benchmark study of 20 diverse tobacco claims evaluated against PhD expert adjudicators:
+* **Mean Absolute Error (MAE):** **6.25** points on a 0–100 scale
+* **Substantial Inter-Rater Agreement:** Weighted Cohen's $\kappa = 0.68$ (95% CI: 0.52–0.84)
+* **Categorical Alignment:** **70%** exact category agreement, **95%** adjacent-level agreement
+* **Explainable Evidence:** Full provenance trails citing authoritative treaty text, systematic reviews, and legal rulings rather than black-box AI outputs.
 
 ---
 
-## System Architecture
+## 🏗️ System Architecture
 
-The framework deconstructs misinformation assessment into three specialized sequential agents:
+The pipeline divides the fact-checking process into three sequential, specialized autonomous agents:
 
 ```mermaid
 flowchart LR
-    A["Raw Text Input / Claims"] --> B["Content Analyzer Agent"]
-    B --> C["Scientific Fact Verifier Agent"]
-    C --> D["Health Evidence Assessor Agent"]
+    A["Raw Text / Claims"] --> B["1. Content Analyzer Agent"]
+    B --> C["2. Scientific Fact Verifier Agent"]
+    C --> D["3. Health Evidence Assessor Agent"]
     D --> E["Audited Credibility Report"]
 
-    subgraph "Agent 1: Extraction & Categorization"
-        B -.-> B1["Classify into 4 Types:\n• Health impact\n• Scientific assertion\n• Policy-related\n• Statistical"]
+    subgraph Step1 ["Step 1: Taxonomy Extraction"]
+        B -.-> B1["Classifies into 4 Claim Types:\n• Health impact\n• Scientific assertion\n• Policy-related\n• Statistical"]
     end
 
-    subgraph "Agent 2: Authoritative Verification"
-        C -.-> C1["Real-Time Evidence Retrieval:\n• WHO FCTC Treaty & Guidelines\n• CDC Facts & Guidelines\n• PubMed Central & Cochrane Reviews\n• WTO Dispute Settlements"]
+    subgraph Step2 ["Step 2: Real-Time Evidence Retrieval"]
+        C -.-> C1["Authoritative Sources (Serper API):\n• WHO FCTC Treaty Text & Decisions\n• Cochrane Reviews & PubMed\n• CDC Facts & Reports\n• WTO Dispute Panel Rulings"]
     end
 
-    subgraph "Agent 3: Multidimensional Scoring"
-        D -.-> D1["5-Factor Weighted Formula:\nEq (40%) + Sc (25%) + Ec (15%)\n+ Er (10%) + Sp (10%)\n→ 5-Tier Credibility Scale"]
+    subgraph Step3 ["Step 3: Algorithm 3 Scoring"]
+        D -.-> D1["Deterministic 5-Factor Formula:\nEq (40%) + Sc (25%) + Ec (15%)\n+ Er (10%) + Sp (10%)\n→ 5-Tier Credibility Category"]
     end
 ```
 
-### The Three Sequential Agents:
-1. **Content Analyzer Agent:** Identifies tobacco-related health claims and classifies each into one of four taxonomic categories: *health impact*, *scientific assertion*, *policy-related*, or *statistical*.
-2. **Scientific Fact Verifier Agent:** Generates targeted queries and queries authoritative public health repositories via the Serper API, compiling evidence trails with bibliographical references.
-3. **Health Evidence Assessor Agent:** Evaluates evidence quality and scientific consensus, computing an auditable credibility score (0–100) mapped onto a five-level classification scale.
+### The Three Agents:
+1. **Content Analyzer Agent:** Deconstructs unstructured text into individual, falsifiable propositions and classifies each into one of four taxonomic categories: *health impact*, *scientific assertion*, *policy-related*, or *statistical*.
+2. **Scientific Fact Verifier Agent:** Autonomous researcher equipped with Google search tools via Serper. It formulates targeted scientific queries and retrieves corroborating and contradicting evidence from authoritative bodies (WHO, FCTC Secretariat, WTO, CDC, Cochrane).
+3. **Health Evidence Assessor Agent:** Evaluates evidence rigor and scientific consensus, generating integer component scores (0–100) across five dimensions and providing a detailed justification trail.
 
 ---
 
-## Credibility Assessment Framework
+## 📐 Credibility Scoring Framework
 
-### 1. The Five-Dimensional Scoring Formula (Algorithm 3)
-Credibility scores are calculated deterministically using the weighted formula established in the published study:
+### 1. Algorithm 3: The 5-Factor Weighted Formula
+Final credibility scores (0–100) are computed deterministically in Python ([`src/edu/scoring.py`](src/edu/scoring.py)) using the formula validated in the published study:
 
-$$\text{Credibility Score} = (Eq \times 0.40) + (Sc \times 0.25) + (Ec \times 0.15) + (Er \times 0.10) + (Sp \times 0.10)$$
+$$\text{Credibility Score} = (E_q \times 0.40) + (S_c \times 0.25) + (E_c \times 0.15) + (E_r \times 0.10) + (S_p \times 0.10)$$
 
-Where:
-* **$Eq$ — Evidence Quality (40%):** Evaluates methodological rigor of supporting vs. refuting studies (systematic reviews and RCTs prioritized over case reports or opinion pieces).
-* **$Sc$ — Scientific Consensus (25%):** Measures agreement across authoritative health bodies (WHO, CDC, Cochrane, WTO).
-* **$Ec$ — Evidence Consistency (15%):** Assesses whether findings from multiple studies and jurisdictions demonstrate consistent conclusions.
-* **$Er$ — Evidence Recency (10%):** Evaluates whether the claim reflects current scientific understanding and recent treaty developments.
-* **$Sp$ — Scientific & Governance Plausibility (10%):** Evaluates alignment with established biological mechanisms and international treaty law.
+| Factor | Name | Weight | Core Definition |
+|---|---|:---:|---|
+| **$E_q$** | **Evidence Quality** | **40%** | Methodological rigor, study design (systematic reviews/RCTs vs. op-eds), peer-review status, and institutional independence. |
+| **$S_c$** | **Scientific / Institutional Consensus** | **25%** | Degree of alignment across major international bodies (WHO, CDC, Cochrane, WTO) and established literature consensus. |
+| **$E_c$** | **Evidence Consistency** | **15%** | Reproducibility of findings across independent research groups, jurisdictions, and demographic cohorts. |
+| **$E_r$** | **Evidence Recency** | **10%** | Currency of evidence, accounting for new COP treaty decisions, market changes, or updated toxicological findings. |
+| **$S_p$** | **Scientific & Legal Plausibility** | **10%** | Consistency with established biological mechanisms, public health principles, and international treaty law. |
 
-### 2. Five-Level Credibility Scale
-Scores are mapped directly to five predefined thresholds:
-* **81–100:** Highly likely to be credible
-* **61–80:** Likely to be credible
-* **41–60:** Moderate credibility
-* **21–40:** Unlikely to be credible
-* **0–20:** Highly unlikely to be credible
+### 2. Five-Level Categorical Classification
+Final composite scores map directly to five intuitive credibility tiers:
+
+| Score Range | Classification Tier | Qualitative Meaning |
+|:---:|---|---|
+| **81.0 – 100.0** | **Highly likely to be credible** | Supported by unequivocal empirical evidence, systematic reviews, and international consensus. |
+| **61.0 – 80.9** | **Likely to be credible** | Strong supporting evidence exists, though minor qualifications or emerging debates remain. |
+| **41.0 – 60.9** | **Moderate credibility** | Divided consensus, mixed empirical results, or claims reflecting subjective policy controversy. |
+| **21.0 – 40.9** | **Unlikely to be credible** | Substantially contradicts established evidence or treaty text; overgeneralized or misleading. |
+| **0.0 – 20.9** | **Highly unlikely to be credible** | Direct falsehood, industry-debunked rhetoric, or demonstrably refuted by scientific consensus. |
 
 ---
 
-## Installation & Setup
+## 🚀 Quick Start Guide
 
-### Prerequisites
+### 1. Prerequisites
 * Python $\ge 3.10, \le 3.13$
-* [UV](https://docs.astral.sh/uv/) package manager (or standard `pip`)
+* [UV](https://docs.astral.sh/uv/) (recommended) or standard `pip`
 * API Keys:
-  * [OpenAI API Key](https://platform.openai.com/) (for GPT-4o / GPT-4.1)
-  * [Serper API Key](https://serper.dev/) (for real-time Google search retrieval)
-  * *(Optional)* [Langtrace API Key](https://www.langtrace.ai/) (for execution tracing & observability)
+  * [Serper API Key](https://serper.dev/) *(required for live web retrieval)*
+  * [OpenAI API Key](https://platform.openai.com/) *(for direct OpenAI models, e.g., GPT-4o)*  
+    **OR**
+  * [OpenRouter API Key](https://openrouter.ai/) *(for OpenRouter models, e.g., `openai/gpt-6-luna`)*
 
-### Step 1: Clone Repository & Install Dependencies
+### 2. Clone & Install
 ```bash
 git clone https://github.com/sherifelmitwalli/misinformation-app.git
 cd misinformation-app
 
-# Using UV (Recommended)
+# Option A: Fast installation with UV (Recommended)
 uv sync
 
-# Or using pip
+# Option B: Standard installation with pip
 pip install -r requirements.txt
 ```
 
-### Step 2: Configure Environment Variables
-Copy `.env.example` to `.env` and insert your API keys:
+### 3. Configure API Keys
+Copy `.env.example` to `.env` and fill in your keys:
 ```bash
 cp .env.example .env
 ```
+
 Edit `.env`:
 ```env
-OPENAI_API_KEY=your_openai_api_key_here
+# Required for live search retrieval:
 SERPER_API_KEY=your_serper_api_key_here
+
+# Option A: Direct OpenAI API
+OPENAI_API_KEY=your_openai_api_key_here
 OPENAI_MODEL_NAME=gpt-4o
+
+# Option B: OpenRouter API (Alternative)
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+OPENROUTER_MODEL=openai/gpt-6-luna
 ```
 
 ---
 
-## Reproducing Paper Results
+## 📊 Reproducing Published Paper Results
 
 To reproduce the benchmark performance metrics reported in **Table 1 and Table 2** of the *Frontiers in AI* paper, run:
 
@@ -126,9 +143,9 @@ To reproduce the benchmark performance metrics reported in **Table 1 and Table 2
 python evaluate_benchmark.py
 ```
 
-This loads the 20 validated tobacco claims from `data/paper_benchmark_20_claims.json` and calculates the statistical agreement against the human expert reviewers:
+This script evaluates the 20 benchmark claims from [`data/paper_benchmark_20_claims.json`](data/paper_benchmark_20_claims.json) against human expert adjudication:
 
-```
+```text
 ================================================================================
 PERFORMANCE VALIDATION METRICS (Against Human Expert Benchmark):
   • Mean Absolute Error (MAE):           6.25 points  (Paper Table 2: 6.25)
@@ -140,57 +157,69 @@ PERFORMANCE VALIDATION METRICS (Against Human Expert Benchmark):
 ================================================================================
 ```
 
-The underlying dataset and expert adjudication records are archived on **Harvard Dataverse**: [doi:10.7910/DVN/ODKMNH](https://doi.org/10.7910/DVN/ODKMNH).
+The primary dataset and human evaluation records are archived on **Harvard Dataverse**: [doi:10.7910/DVN/ODKMNH](https://doi.org/10.7910/DVN/ODKMNH).
 
 ---
 
-## Running the Multi-Agent Pipeline
+## 🧪 Running Live Pipeline Experiments
 
-To evaluate custom claims using the live multi-agent crew:
-
+### 1. Default Pipeline Execution
+To assess sample tobacco claims using the full multi-agent crew:
 ```bash
 python src/edu/main.py
 ```
-
-Or execute via the CrewAI CLI:
+Or via the CrewAI CLI:
 ```bash
 crewai run
 ```
 
-The system outputs a detailed assessment markdown report (`credibility_report.md`) detailing the individual claim classifications, evidence quality breakdowns, and bibliographic references.
+### 2. Evaluating WHO FCTC COP Policy Claims
+To run the automated multi-agent assessment on the 6 Conference of the Parties (COP) policy claims evaluated for London Global Cancer Week:
+```bash
+python run_original_six_crew.py
+```
+
+### 3. Phrasing & Framing Sensitivity Experiments
+To evaluate how linguistic framing and propositional nuance affect automated credibility assessments:
+```bash
+python run_revised_claims_crew.py
+```
 
 ---
 
-## Repository Structure
+## 📁 Repository Structure
 
-```
+```text
 misinformation-app/
 ├── data/
-│   └── paper_benchmark_20_claims.json   # 20 validation claims from paper Table 1
+│   └── paper_benchmark_20_claims.json     # 20 benchmark claims & expert scores (Table 1)
 ├── src/
 │   └── edu/
 │       ├── config/
-│       │   ├── agents.yaml               # Agent definitions (Analyzer, Verifier, Assessor)
-│       │   └── tasks.yaml                # Task prompts, contexts, and output formats
+│       │   ├── agents.yaml                 # Agent roles, goals, and backstories
+│       │   └── tasks.yaml                  # Task descriptions, expected outputs, rubrics
 │       ├── tools/
-│       │   ├── custom_tool.py            # Domain-specific retrieval tools
+│       │   ├── custom_tool.py              # Domain-specific web scraping tools
 │       │   └── __init__.py
-│       ├── crew.py                       # CrewAI orchestration & sequential workflow
-│       ├── main.py                       # Application execution entry point
-│       ├── scoring.py                    # Deterministic Algorithm 3 & evaluation metrics
+│       ├── crew.py                         # Multi-agent crew orchestration & LLM router
+│       ├── main.py                         # Default execution entry point
+│       ├── scoring.py                      # Deterministic Algorithm 3 & validation metrics
 │       └── __init__.py
-├── .env.example                          # Template for environment variables
-├── .gitignore                            # Excludes credentials, logs, and build files
-├── evaluate_benchmark.py                 # Standalone script to reproduce paper metrics
-├── pyproject.toml                        # Project dependencies
-└── README.md                             # Repository documentation
+├── .env.example                            # Configuration template (zero secrets)
+├── .gitignore                              # Excludes keys, logs, and generated artifacts
+├── evaluate_benchmark.py                   # Standalone benchmark verification script
+├── run_original_six_crew.py                # Runner for COP policy claims evaluation
+├── run_revised_claims_crew.py              # Runner for phrasing & framing sensitivity analysis
+├── test_harm_reduction_phrasings.py        # Diagnostic sensitivity testing utility
+├── pyproject.toml                          # Project metadata and dependencies
+└── README.md                               # Project documentation
 ```
 
 ---
 
-## Citation
+## 📖 Citation
 
-If you use this codebase, framework, or benchmark dataset in your research, please cite our paper:
+If you use this pipeline, code, or benchmark dataset in your research, please cite our paper:
 
 ```bibtex
 @article{elmitwalli2025multiagent,
@@ -200,13 +229,15 @@ If you use this codebase, framework, or benchmark dataset in your research, plea
   volume={8},
   pages={1659861},
   year={2025},
-  publisher={Frontiers},
+  publisher={Frontiers Media SA},
   doi={10.3389/frai.2025.1659861}
 }
 ```
 
 ---
 
-## License
+## ⚖️ License & Acknowledgements
 
-This project is released under the [Apache 2.0 License](LICENSE).
+* **License:** Distributed under the [Apache 2.0 License](LICENSE).
+* **Research Group:** Tobacco Control Research Group (TCRG), Department for Health, University of Bath, UK.
+* **Funding Acknowledgement:** This work was supported in part by Bloomberg Philanthropies as part of the STOP (Stopping Tobacco Organizations and Products) project.
